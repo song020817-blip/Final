@@ -1,8 +1,12 @@
 from enum import Enum
+import os
+import requests
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+
+from predictor import predict_price
 
 
 # =========================
@@ -18,7 +22,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://vocal-maamoul-60eaa6.netlify.app",
-        # 개발 중 테스트가 필요하면 아래 주석을 해제하세요.
+        # 개발 중 필요 시:
         # "http://localhost:3000",
         # "http://127.0.0.1:3000",
     ],
@@ -29,7 +33,7 @@ app.add_middleware(
 
 
 # =========================
-# 3) 입력값 검증용 Enum
+# 3) Enum 정의
 # =========================
 class HousingType(str, Enum):
     villa = "연립다세대"
@@ -42,15 +46,15 @@ class RentType(str, Enum):
 
 
 # =========================
-# 4) 요청/응답 스키마
+# 4) Request / Response
 # =========================
 class PredictRequest(BaseModel):
     address: str = Field(..., min_length=2, description="시군구+번지 포함 주소")
-    area: float = Field(..., gt=0, description="면적(㎡)")
+    area: float = Field(..., gt=0, description="전용면적(㎡)")
     floor: int = Field(..., description="층수")
     year_built: int = Field(..., ge=1900, le=2100, description="준공년도")
-    housing_type: HousingType = Field(..., description="주택유형(연립다세대/오피스텔)")
-    rent_type: RentType = Field(..., description="전월세구분(전세/월세)")
+    housing_type: HousingType
+    rent_type: RentType
 
 
 class PredictResponse(BaseModel):
@@ -67,39 +71,57 @@ def health():
 
 
 # =========================
-# 6) 예측 API (현재는 더미 로직)
-#    - 나중에 여기만 ML 모델 예측으로 교체하면 됨
+# 6) 유틸: 주소 → 위도/경도
+# =========================
+def get_lat_lng_from_address(address: str):
+    kakao_key = os.getenv("KAKAO_API_KEY")
+    if not kakao_key:
+        raise HTTPException(status_code=500, detail="KAKAO_API_KEY 환경변수가 설정되지 않았습니다.")
+
+    url = "https://dapi.kakao.com/v2/local/search/address.json"
+    headers = {"Authorization": f"KakaoAK {kakao_key}"}
+    params = {"query": address}
+
+    try:
+        resp = requests.get(url, headers=headers, params=params, timeout=3)
+        resp.raise_for_status()
+        data = resp.json()
+    except Exception:
+        raise HTTPException(status_code=500, detail="카카오 주소 API 호출 실패")
+
+    if not data.get("documents"):
+        raise HTTPException(status_code=400, detail="주소를 좌표로 변환할 수 없습니다.")
+
+    lon = float(data["documents"][0]["x"])
+    lat = float(data["documents"][0]["y"])
+    return lat, lon
+
+
+# =========================
+# 7) 예측 API (실제 모델 연결)
 # =========================
 @app.post("/predict", response_model=PredictResponse)
 def predict(req: PredictRequest):
-    """
-    최종 스펙 기준 예측 API.
-    현재는 더미(임시) 예측 로직이며,
-    추후 ML 모델 연결 시 이 함수 내부만 교체하면 됩니다.
-    """
-    # 계약년월 입력을 받지 않는 스펙이므로, 연식은 "대략값"으로만 반영
-    # (진짜 모델 연결 시에는 계약년월/시장지표 등을 백엔드에서 내부적으로 붙이면 됩니다.)
-    approx_age = max(2025 - req.year_built, 0)  # 임시 기준연도
 
-    # 주택유형 가중치(임시)
-    if req.housing_type == HousingType.officetel:
-        type_mult = 1.05
-    else:  # 연립다세대
-        type_mult = 0.95
-
-    # 더미 보증금 예측(만원 단위 느낌으로 만든 임시값)
-    deposit = (req.area * 450 + req.floor * 25 - approx_age * 8) * type_mult
-    deposit = max(deposit, 0)
-
-    # 전월세 구분에 따른 월세 처리
+    # 전세: 보증금 예측, 월세=0
     if req.rent_type == RentType.jeonse:
-        monthly = 0.0
-    else:
-        # 월세 더미: 면적/층/연식 영향만 가볍게 반영
-        monthly = req.area * 1.8 + max(0, 10 - req.floor) * 1.2 + approx_age * 0.15
-        monthly = max(monthly, 0)
+        deposit = predict_price(
+            housing_type=req.housing_type.value,
+            rent_type="전세",
+            address=req.address,
+            area=req.area,
+            floor=req.floor,
+            year_built=req.year_built
+        )
+        return PredictResponse(deposit_pred=deposit, monthly_pred=0.0)
 
-    return PredictResponse(
-        deposit_pred=float(round(deposit, 2)),
-        monthly_pred=float(round(monthly, 2)),
+    # 월세: 보증금=1000 고정, 월세 예측
+    monthly = predict_price(
+        housing_type=req.housing_type.value,
+        rent_type="월세",
+        address=req.address,
+        area=req.area,
+        floor=req.floor,
+        year_built=req.year_built
     )
+    return PredictResponse(deposit_pred=1000.0, monthly_pred=monthly)
