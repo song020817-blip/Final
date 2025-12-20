@@ -1,3 +1,9 @@
 fastapi
 uvicorn
 pydantic
+joblib
+xgboost
+lightgbm
+pandas
+numpy
+requests
