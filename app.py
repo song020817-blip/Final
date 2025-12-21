@@ -30,6 +30,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+
+BASE_DIR = Path(__file__).resolve().parent
+HTML_DIR = BASE_DIR / "html"
+
+# /ui 아래로 정적파일 제공 (예: /ui/predict.html)
+if HTML_DIR.exists():
+    app.mount("/ui", StaticFiles(directory=str(HTML_DIR), html=True), name="ui")
 
 
 # =========================
