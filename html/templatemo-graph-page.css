@@ -1,0 +1,309 @@
+@charset "utf-8";
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: #0a0e27;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+/* Navigation */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 20px 50px;
+    background: rgba(10, 14, 39, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+nav.scrolled {
+    padding: 15px 50px;
+    background: rgba(10, 14, 39, 0.98);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #00ffcc 0%, #00ccff 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: #0a0e27;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffffff 0%, #00ffcc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all .3s;
+}
+
+.nav-links a:hover {
+    color: #00ffcc;
+}
+
+.nav-links a.active {
+    color: #00ccff;
+}
+
+/* ===== 파노라마 HERO 새로 작성 ===== */
+
+.hero {
+    padding-top: 140px;      /* 고정된 네비 아래 여유 */
+    padding-bottom: 80px;
+    background: #0a0e27;
+}
+
+.hero-inner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* 문구 부분 */
+.hero-text h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.hero-text h2 {
+    font-size: 22px;
+    font-weight: 400;
+    margin-top: 0;
+}
+
+/* 파노라마 이미지 래퍼 */
+.hero-panorama {
+    width: 100%;
+    height: 50vh;            /* 화면 높이의 40퍼 정도만 차지 */
+    max-height: 420px;       /* 너무 커지는 것 방지 */
+    margin-top: 30px;
+    overflow: hidden;
+    border-radius: 0;        /* 만약 모서리 둥글게 하고 싶으면 16px 정도로 변경 */
+}
+
+/* 실제 이미지 */
+.hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;       /* 파노라마 느낌으로 위아래 살짝 잘라서 채우기 */
+    object-position: center center; /* 잘리는 위치 중앙 정렬 */
+    display: block;
+}
+
+/* 나머지 페이지에서 쓰던 기하학 도형은 안 쓸거라면 숨김 */
+.geometric-shapes {
+    display: none;
+}
+
+/* Footer */
+footer {
+    padding: 40px;
+    text-align: center;
+    background: #0a0e27;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-content p {
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .nav-links { 
+        display: none; 
+    }
+    .hamburger { 
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+    }
+    .hamburger span { 
+        width: 25px;
+        height: 3px;
+        background: #fff; 
+    }
+
+    .hero {
+        padding-top: 120px;
+        padding-bottom: 60px;
+    }
+
+    .hero-text h1 {
+        font-size: 30px;
+    }
+
+    .hero-text h2 {
+        font-size: 18px;
+    }
+
+    .hero-panorama {
+        height: 35vh;
+        max-height: 260px;
+    }
+}
+.search-box {
+    padding: 25px;
+    background: #ffffff10;
+    border-radius: 10px;
+    margin-top: 20px;
+    width: 420px;
+}
+
+.label-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.search-section {
+    margin-bottom: 20px;
+}
+
+.search-section input[type="text"] {
+    width: 300px;
+    padding: 6px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 3px;
+}
+
+#crawlBtn {
+    background-color: #4CAF50;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+#crawlBtn:disabled {
+    background-color: #888;
+    cursor: not-allowed;
+}
+
+/* ===== Resident 페이지 좌우 레이아웃 ===== */
+
+.Members-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.crawl-box {
+    width: 420px;
+    flex-shrink: 0;
+}
+
+.result-area {
+    flex: 1;
+    background: #ffffff08;
+    border-radius: 10px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+/* ===== 결과 테이블 스타일 ===== */
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* 칸 너비 고정 */
+    font-size: 14px;
+    color: #fff;
+}
+
+/* 헤더 */
+.result-table thead th {
+    background: rgba(0, 255, 204, 0.15);
+    color: #00ffcc;
+    font-weight: 600;
+    padding: 12px 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+/* 바디 */
+.result-table tbody td {
+    padding: 10px 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* 행 호버 */
+.result-table tbody tr:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* 칸별 너비 지정 */
+.result-table th:nth-child(1),
+.result-table td:nth-child(1) {
+    width: 15%; /* 전용면적 */
+}
+
+.result-table th:nth-child(2),
+.result-table td:nth-child(2) {
+    width: 20%; /* 계약기간 */
+}
+
+.result-table th:nth-child(3),
+.result-table td:nth-child(3),
+.result-table th:nth-child(4),
+.result-table td:nth-child(4) {
+    width: 20%; /* 보증금 / 월세 */
+}
+
+.result-table th:nth-child(5),
+.result-table td:nth-child(5) {
+    width: 15%; /* 계약구분 */
+}
+
+
+

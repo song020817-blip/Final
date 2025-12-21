@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident - Graph Page</title>
+    <link rel="stylesheet" href="templatemo-graph-page.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+    <div class="logo-icon">
+        <img src="images/hamburger.png" alt="logo" style="width:35px; height:35px;">
+    </div>
+    <span class="logo-text">MR.GET HOUSE</span>
+</a>
+
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="members.html">Members</a></li>
+                <li><a href="resident.html" class="active">Resident</a></li>
+                <li><a href="predict.html">Predict</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero no-bg">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Resident Data</h1>
+                <p>궁금한 아파트, 연립다세대, 오피스텔의 가격을 검색해보세요.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resident Section -->
+   <section class="Resident-section">
+    <div class="Members-container">
+
+        <!-- 왼쪽: 검색 영역 -->
+        <div class="crawl-box">
+
+            <div class="search-box">
+                <h2>실거래가 조회</h2>
+
+                <!-- 거래유형 -->
+                <div class="search-section">
+                    <label class="label-title">거래유형</label><br>
+                    <label><input type="radio" name="tp" value="아파트" checked> 아파트</label>
+                    <label><input type="radio" name="tp" value="연립다세대"> 연립다세대</label>
+
+                    <label><input type="radio" name="tp" value="오피스텔"> 오피스텔</label>
+                </div>
+
+                <!-- 주소 방식 -->
+                <div class="search-section">
+                    <label class="label-title">주소 방식</label><br>
+                    <label><input type="radio" name="addrType" value="지번"> 지번</label>
+                    <label><input type="radio" name="addrType" value="도로명" checked> 도로명</label>
+                </div>
+
+                <!-- 지역 입력 -->
+                <div class="search-section">
+                    <label class="label-title">지역 입력</label><br>
+
+                    <label>시도명:
+                        <input id="sido" type="text" placeholder="예: 서울특별시">
+                    </label><br>
+
+                    <label>시군구명:
+                        <input id="sigungu" type="text" placeholder="예: 강남구">
+                    </label><br>
+
+                    <label>도로명:
+                        <input id="road" type="text" placeholder="예: 테헤란로">
+                    </label><br>
+
+                    <label>단지명:
+                        <input id="bldg" type="text" placeholder="예: 삼성동힐스테이트">
+                    </label><br>
+                </div>
+
+                <!-- 검색 버튼 -->
+                <button id="crawlBtn" class="tm-btn">검색</button>
+
+                <div id="loadingMessage" style="display:none; margin-top:15px; color:white;">
+                    크롤링 중... 잠시만 기다려주세요
+                </div>
+            </div>
+        </div>
+
+        <!-- 오른쪽: 결과 영역 -->
+        <div class="result-area" style="display:none;">
+            <table id="resultTable" class="result-table">
+                <thead>
+                    <tr>
+                        <th>전용면적 (m²)</th>
+                        <th>계약일</th>
+
+                        <th>보증금 (만원)</th>
+                        <th>월세 (만원)</th>
+                        <th>층</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS가 채움 -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 MR.GET HOUSE</p>
+        </div>
+    </footer>
+
+<script src="templatemo-graph-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members - MR.GET HOUSE</title>
+    <link rel="stylesheet" href="templatemo-graph-page.css">
+
+<style>
+    .team-section {
+        text-align:center;
+        padding:40px 0;
+        color:white;
+    }
+
+    .team-grid {
+        display:flex;
+        justify-content:center;
+        gap:40px;
+        flex-wrap: nowrap; /* ★ 한 줄 고정 */
+        margin-top:30px;
+    }
+
+    .team-card {
+        background:#111827;
+        padding:25px;
+        border-radius:18px;
+        width:260px;
+        text-align:center;
+        box-shadow:0 0 20px rgba(0,0,0,0.4);
+        transition:0.3s;
+    }
+
+    .team-card:hover {
+        transform: translateY(-8px);
+        box-shadow:0 0 25px rgba(0, 255, 255, 0.4);
+    }
+
+    .team-img {
+        width:160px;
+        height:160px;
+        border-radius:12px;
+        object-fit:cover;
+        border:4px solid #00eaff;
+        margin-bottom:15px;
+    }
+
+    .team-name {
+        font-size:22px;
+        font-weight:700;
+        margin-bottom:5px;
+    }
+
+    .team-role {
+        font-size:16px;
+        opacity:0.8;
+        margin-bottom:10px;
+    }
+
+    .team-email {
+        font-size:15px;
+        opacity:0.8;
+    }
+</style>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <img src="images/hamburger.png" alt="logo" style="width:35px; height:35px;">
+                </div>
+                <span class="logo-text">MR.GET HOUSE</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="members.html" class="active">Members</a></li>
+                <li><a href="resident.html">Resident</a></li>
+                <li><a href="predict.html">Predict</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- Hero -->
+    <section class="hero no-bg">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Members Overview</h1>
+                <p> 최근 청년층과 1인 가구의 자취 수요가 급증하면서, 안정적이고 합리적인 주거 선택의 중요성이 커지고 있습니다. </p>
+</p>하지만 부동산 시세는 다양한 요인에 의해 급격히 변동되며, 최근 사회적으로 문제가 되고 있는 전세사기 사건으로 인해 데이터 기반의 객관적 시세 예측 시스템의 필요성을 보여줍니다.</p>
+ </p>이에 국토 교통부 실거래가 데이터를 중심으로 데이터를 결합해, 매물의 실제 시세를 예측하고 결측 매물의 가격을 주변 시세로 추정하는 모델을 구축하고자 합니다.
+</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Members Section -->
+    <section class="Members-section" id="Members">
+        <div class="Members-container">
+            <h2 class="section-title">Members Overview</h2>
+
+            <div class="stats-grid">
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ★ TEAM SECTION 추가됨 ★ -->
+    <section class="team-section">
+        <h1 style="font-size:32px; font-weight:800;">MR.GET HOUSE</h1>
+        <p style="opacity:0.8;">WE ARE MR.GET HOUSE</p>
+
+        <div class="team-grid">
+
+            <!-- 고은혁 -->
+            <div class="team-card">
+                <img src="images/ko.jpg" class="team-img">
+                <div class="team-name">고은혁</div>
+                <div class="team-role">front-end</div>
+                <div class="team-email">ko@konkuk.ac.kr</div>
+            </div>
+
+            <!-- 김가은 -->
+            <div class="team-card">
+                <img src="images/ga.jpg" class="team-img">
+                <div class="team-name">김가은</div>
+                <div class="team-role">crawling / design / front-end</div>
+                <div class="team-email">gaeun4349@konkuk.ac.kr</div>
+            </div>
+
+            <!-- 송정우 -->
+            <div class="team-card">
+                <img src="images/song.jpg" class="team-img">
+                <div class="team-name">송정우</div>
+                <div class="team-role">machine learing / back-end</div>
+                <div class="team-email">james8202@konkuk.ac.kr</div>
+            </div>
+
+            <!-- 정지환 -->
+            <div class="team-card">
+                <img src="images/jung.jpg" class="team-img">
+                <div class="team-name">정지환</div>
+                <div class="team-role">machine learning / back-end</div>
+                <div class="team-email">jh0204010@konkuk.ac.kr</div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 MR.GET HOUSE</p>
+        </div>
+    </footer>
+
+<script src="templatemo-graph-script.js"></script>
+</body>
+</html>
