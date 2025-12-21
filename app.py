@@ -10,6 +10,10 @@ from predictor import predict_price
 
 from sqlalchemy import create_engine, text
 
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+engine = create_engine(DATABASE_URL)
+
 # =========================
 # 1) 앱 생성
 # =========================
@@ -122,7 +126,6 @@ def predict(req: PredictRequest):
             year_built=req.year_built
         )
         monthly = 0.0
-
     else:
         deposit = 1000.0
         monthly = predict_price(
@@ -134,31 +137,31 @@ def predict(req: PredictRequest):
             year_built=req.year_built
         )
 
-    # 2️⃣ DB 저장 (★ 여기서 함)
+    # 2️⃣ DB 저장 (★ 자동 COMMIT)
     with engine.begin() as conn:
-    conn.execute(
-        text("""
-            INSERT INTO rent_predictions (
-                address, area, floor, year_built,
-                housing_type, rent_type,
-                deposit_pred, monthly_pred
-            ) VALUES (
-                :address, :area, :floor, :year_built,
-                :housing_type, :rent_type,
-                :deposit_pred, :monthly_pred
-            )
-        """),
-        {
-            "address": req.address,
-            "area": req.area,
-            "floor": req.floor,
-            "year_built": req.year_built,
-            "housing_type": req.housing_type.value,
-            "rent_type": req.rent_type.value,
-            "deposit_pred": deposit,
-            "monthly_pred": monthly,
-        }
-    )
+        conn.execute(
+            text("""
+                INSERT INTO rent_predictions (
+                    address, area, floor, year_built,
+                    housing_type, rent_type,
+                    deposit_pred, monthly_pred
+                ) VALUES (
+                    :address, :area, :floor, :year_built,
+                    :housing_type, :rent_type,
+                    :deposit_pred, :monthly_pred
+                )
+            """),
+            {
+                "address": req.address,
+                "area": req.area,
+                "floor": req.floor,
+                "year_built": req.year_built,
+                "housing_type": req.housing_type.value,
+                "rent_type": req.rent_type.value,
+                "deposit_pred": deposit,
+                "monthly_pred": monthly,
+            }
+        )
 
     # 3️⃣ 응답 반환
     return PredictResponse(
@@ -168,12 +171,11 @@ def predict(req: PredictRequest):
 
 
 
+
 # =========================
 # 8) DB연결
 # =========================
-DATABASE_URL = os.environ.get("DATABASE_URL")
 
-engine = create_engine(DATABASE_URL)
 
 @app.get("/db-test")
 def db_test():
