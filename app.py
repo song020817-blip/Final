@@ -22,9 +22,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://vocal-maamoul-60eaa6.netlify.app",
-        # 개발 중 필요 시:
-        # "http://localhost:3000",
-        # "http://127.0.0.1:3000",
+        "https://gogeous-chimera-a243.netlify.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
