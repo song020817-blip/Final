@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 from predictor import predict_price
 
+from sqlalchemy import create_engine, text
 
 # =========================
 # 1) 앱 생성
@@ -132,3 +133,17 @@ def predict(req: PredictRequest):
         year_built=req.year_built
     )
     return PredictResponse(deposit_pred=1000.0, monthly_pred=monthly)
+
+
+# =========================
+# 8) DB연결
+# =========================
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+engine = create_engine(DATABASE_URL)
+
+@app.get("/db-test")
+def db_test():
+    with engine.connect() as conn:
+        conn.execute(text("SELECT 1"))
+    return {"db": "connected"}
