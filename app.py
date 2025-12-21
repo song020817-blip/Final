@@ -135,30 +135,30 @@ def predict(req: PredictRequest):
         )
 
     # 2️⃣ DB 저장 (★ 여기서 함)
-    with engine.connect() as conn:
-        conn.execute(
-            text("""
-                INSERT INTO rent_predictions (
-                    address, area, floor, year_built,
-                    housing_type, rent_type,
-                    deposit_pred, monthly_pred
-                ) VALUES (
-                    :address, :area, :floor, :year_built,
-                    :housing_type, :rent_type,
-                    :deposit_pred, :monthly_pred
-                )
-            """),
-            {
-                "address": req.address,
-                "area": req.area,
-                "floor": req.floor,
-                "year_built": req.year_built,
-                "housing_type": req.housing_type.value,
-                "rent_type": req.rent_type.value,
-                "deposit_pred": deposit,
-                "monthly_pred": monthly,
-            }
-        )
+    with engine.begin() as conn:
+    conn.execute(
+        text("""
+            INSERT INTO rent_predictions (
+                address, area, floor, year_built,
+                housing_type, rent_type,
+                deposit_pred, monthly_pred
+            ) VALUES (
+                :address, :area, :floor, :year_built,
+                :housing_type, :rent_type,
+                :deposit_pred, :monthly_pred
+            )
+        """),
+        {
+            "address": req.address,
+            "area": req.area,
+            "floor": req.floor,
+            "year_built": req.year_built,
+            "housing_type": req.housing_type.value,
+            "rent_type": req.rent_type.value,
+            "deposit_pred": deposit,
+            "monthly_pred": monthly,
+        }
+    )
 
     # 3️⃣ 응답 반환
     return PredictResponse(
