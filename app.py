@@ -126,6 +126,3 @@ def predict(req: PredictRequest):
     )
     return PredictResponse(deposit_pred=1000.0, monthly_pred=monthly)
 
-from fastapi.staticfiles import StaticFiles
-
-app.mount("/", StaticFiles(directory="html", html=True), name="html")
