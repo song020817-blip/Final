@@ -111,7 +111,7 @@ def get_lat_lng_from_address(address: str):
 @app.post("/predict", response_model=PredictResponse)
 def predict(req: PredictRequest):
 
-    # 전세: 보증금 예측, 월세=0
+    # 1️⃣ 예측값 계산
     if req.rent_type == RentType.jeonse:
         deposit = predict_price(
             housing_type=req.housing_type.value,
@@ -121,18 +121,51 @@ def predict(req: PredictRequest):
             floor=req.floor,
             year_built=req.year_built
         )
-        return PredictResponse(deposit_pred=deposit, monthly_pred=0.0)
+        monthly = 0.0
 
-    # 월세: 보증금=1000 고정, 월세 예측
-    monthly = predict_price(
-        housing_type=req.housing_type.value,
-        rent_type="월세",
-        address=req.address,
-        area=req.area,
-        floor=req.floor,
-        year_built=req.year_built
+    else:
+        deposit = 1000.0
+        monthly = predict_price(
+            housing_type=req.housing_type.value,
+            rent_type="월세",
+            address=req.address,
+            area=req.area,
+            floor=req.floor,
+            year_built=req.year_built
+        )
+
+    # 2️⃣ DB 저장 (★ 여기서 함)
+    with engine.connect() as conn:
+        conn.execute(
+            text("""
+                INSERT INTO rent_predictions (
+                    address, area, floor, year_built,
+                    housing_type, rent_type,
+                    deposit_pred, monthly_pred
+                ) VALUES (
+                    :address, :area, :floor, :year_built,
+                    :housing_type, :rent_type,
+                    :deposit_pred, :monthly_pred
+                )
+            """),
+            {
+                "address": req.address,
+                "area": req.area,
+                "floor": req.floor,
+                "year_built": req.year_built,
+                "housing_type": req.housing_type.value,
+                "rent_type": req.rent_type.value,
+                "deposit_pred": deposit,
+                "monthly_pred": monthly,
+            }
+        )
+
+    # 3️⃣ 응답 반환
+    return PredictResponse(
+        deposit_pred=deposit,
+        monthly_pred=monthly
     )
-    return PredictResponse(deposit_pred=1000.0, monthly_pred=monthly)
+
 
 
 # =========================
