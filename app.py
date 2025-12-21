@@ -25,60 +25,6 @@ app.add_middleware(
     allow_headers=["*"],              # 모든 헤더 허용
 )
 
-
-# ========== 기존 크롤링 API ==========
-class CrawlRequest(BaseModel):
-    tp: str
-    addr: str
-    sido: str
-    sigungu: str
-    road: str
-    bldg: str
-
-@app.post("/api/crawl")
-def crawl(data: CrawlRequest):
-    result = run_crawler(
-        tp=data.tp,
-        addr=data.addr,
-        sido=data.sido,
-        sigungu=data.sigungu,
-        road=data.road,
-        bldg=data.bldg
-    )
-    # ===== 검색 결과가 있을 때만 로그 저장 =====
-    if result and isinstance(result, list) and len(result) > 0:
-        try:
-            first = result[0]
-            deposit_raw = first.get("보증금(만원)")
-            monthly_raw = first.get("월세(만원)")
-            deposit = int(deposit_raw.replace(",", "")) if deposit_raw else None
-            monthly = int(monthly_raw.replace(",", "")) if monthly_raw else None
-            
-            conn = get_db_conn()
-            cur = conn.cursor()
-            cur.execute(
-                """
-                INSERT INTO user_action_log
-                (tab_type, complex_name, region, deposit, monthly_rent)
-                VALUES (%s, %s, %s, %s, %s)
-                """,
-                (
-                    "resident",
-                    data.bldg,
-                    data.sigungu,
-                    deposit,
-                    monthly
-                )
-            )
-            conn.commit()
-            cur.close()
-            conn.close()
-        except Exception as e:
-            print("로그 저장 실패:", e)
-    
-    return {"success": True, "result": result}
-
-
 # ========== ✅ 예측 API (이 부분이 꼭 필요해요!) ==========
 class PredictRequest(BaseModel):
     address: str
