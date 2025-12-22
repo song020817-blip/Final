@@ -305,5 +305,62 @@ footer {
     width: 15%; /* 계약구분 */
 }
 
+/* =========================
+   Predict Search Card
+========================= */
+/* Predict 카드 */
+/* Predict 카드 */
+.predict-card {
+  max-width: 900px;
+  margin: 40px auto 0;
+  padding: 40px 50px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+}
+
+/* Grid 레이아웃 */
+.predict-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* 주소는 한 줄 전체 */
+.input-wide {
+  grid-column: 1 / -1;
+}
+
+/* input / select 공통 */
+.predict-grid input,
+.predict-grid select {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+}
+
+/* 버튼 */
+.predict-btn {
+  display: block;
+  margin: 40px auto 0;
+  padding: 14px 50px;
+  border-radius: 14px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #00ffd5, #00b3ff);
+  cursor: pointer;
+}
+
+/* 결과 */
+.predict-result {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 18px;
+  color: #00ffd5;
+}
+
+
 
 
